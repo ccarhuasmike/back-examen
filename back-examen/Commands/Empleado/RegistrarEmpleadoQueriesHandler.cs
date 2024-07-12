@@ -68,6 +68,17 @@ public class RegistrarEmpleadoQueriesHandler : IRequestHandler<EmpleadoRequest, 
                     respuesta = returnIds > 0;
                 }
             }
+
+            else if (request.Empleado?.accion == "EliminarEmpleado" && request.Empleado?.id != 0)
+            {
+                    returnIds = await cn.ExecuteScalarAsync<int>(
+                        @"delete from tb_empleado where id=@id",request.Empleado);
+                    
+                    mensaje = returnIds == 0
+                        ? "Se elimino correctamente"
+                        : "Hubo un error, por favor comuníquese con el administrador del sistema.";
+                    respuesta = returnIds == 0;
+            }
             else
             {
                 var update =
